@@ -1,10 +1,3 @@
-//
-//  photopickerTests.swift
-//  photopickerTests
-//
-//  Created by shiva kumar on 10/12/23.
-//
-
 import XCTest
 @testable import photopicker
 

@@ -1,10 +1,3 @@
-//
-//  photopickerApp.swift
-//  photopicker
-//
-//  Created by shiva kumar on 10/12/23.
-//
-
 import SwiftUI
 
 @main
