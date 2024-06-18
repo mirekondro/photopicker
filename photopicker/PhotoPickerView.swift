@@ -39,7 +39,7 @@ struct PhotoPickerView: View {
         }
         .onChange(of: selectedItems) { newItems in
             newItems.forEach { item in
-                // Clear the earlier selected images, so that only fresh selection is shown
+                
                 selectedImages = []
                 Task {
                     do {
