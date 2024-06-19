@@ -4,19 +4,17 @@ import PhotosUI
 enum PhotoPickerError: Error {
     case failedToLoadImageData
     case failedToConvertDataToImage
-    // Add more error cases as needed
 }
 
 struct PhotoPickerView: View {
-    @State private var selectedItems:[PhotosPickerItem] = []
+    @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedImages: [UIImage] = []
-
 
     var body: some View {
         VStack {
             if !selectedImages.isEmpty {
                 ScrollView(showsIndicators: false) {
-                    ForEach(selectedImages, id: \.self) {image in
+                    ForEach(selectedImages, id: \.self) { image in
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFit()
@@ -25,15 +23,14 @@ struct PhotoPickerView: View {
                 }
                 .frame(width: 300, height: 500)
             }
-            
+
             PhotosPicker(selection: $selectedItems, matching: .images) {
                 Label("Pick Photos", systemImage: "photo.fill.on.rectangle.fill")
             }
         }
         .onChange(of: selectedItems) { newItems in
+            selectedImages = []
             newItems.forEach { item in
-                
-                selectedImages = []
                 Task {
                     do {
                         guard let data = try? await item.loadTransferable(type: Data.self) else {
@@ -43,19 +40,32 @@ struct PhotoPickerView: View {
                             throw PhotoPickerError.failedToConvertDataToImage
                         }
                         selectedImages.append(image)
-                    }catch {
-                        // Handle error
+                    } catch {
                         print("Error loading image \(error)")
                     }
-
                 }
             }
         }
     }
 }
 
-struct PhotoPickerView_Previews: PreviewProvider {
+struct ContentView: View {
+    var body: some View {
+        TabView {
+            PhotoPickerView()
+                .tabItem {
+                    Label("Photos", systemImage: "photo")
+                }
+            Text("Other Tab")
+                .tabItem {
+                    Label("Other", systemImage: "square.and.pencil")
+                }
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        PhotoPickerView()
+        ContentView()
     }
 }
